@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HotelReserveViewer
 // @namespace    com.chuo.koki
-// @version      1.1.0
+// @version      1.2.0
 // @description  Improve view of Hotel alpha-one reservation page.
 // @author       Koki
 // @match        https://alpha1-u.hotels-system.jp/yoyakusearchg.aspx
@@ -15,7 +15,7 @@
     'use strict';
 
     // Your code here...
-    alert('Hello, monkey!');
+    // alert('Hello, monkey!');
 
     // ========
     // 機能1: テーブルをソートできるようにする
@@ -59,6 +59,28 @@
             $(targetTd).css('background-color','snow');
         } else if ( smokableYN.match(/禁煙/) ) {
             $(targetTd).css('background-color','azure');
+        }
+    });
+
+    // ========
+    // 機能4: キャンセル済みの予約の表示・非表示切替機能をつける
+    // ========
+    // 切替ボタンを追加
+    var battonAdd = '<input type="button" style="margin-left:30px;" value="キャンセル：非表示" id="button_ShowHideCanceledReservation">';
+    $("#tdShukuhakuRireki").append(battonAdd);
+    $("input#button_ShowHideCanceledReservation").click(function(){
+        if( this.value == "キャンセル：非表示" ){
+            this.value = "キャンセルを表示する";
+            $("table#Table1 tbody tr").each(function(i, elem) {
+                var targetTd = $(elem).find("td")[5];
+                var strIsCanceled = targetTd.innerText;
+                if ( strIsCanceled.match(/キャンセル/) ) {
+                    $(elem).css('display', 'none');
+                }
+            });
+        } else {
+            this.value = "キャンセル：非表示";
+            TT_TsujoHyoji();
         }
     });
 
